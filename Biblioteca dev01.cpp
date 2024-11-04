@@ -132,6 +132,7 @@
 	    reservas.push_back(nuevaReserva);
 	    }
 	
+		/*
 	    void mostrarReservas() {
 	        for (size_t i = 0; i < reservas.size(); ++i) {
 	            const Reserva& r = reservas[i];
@@ -143,6 +144,56 @@
 	                      << ", Estado: " << (r.estado == 1 ? "Activo" : "Inactivo") << "\n";
 	        }
 	    }
+	    */
+	    
+	    void mostrarReservas() {
+			    for (size_t i = 0; i < reservas.size(); ++i) {
+			        const Reserva& r = reservas[i];
+			        
+			        // Buscar el libro correspondiente usando el idLibro de la reserva
+			        std::string nombreLibro;
+			        bool libroEncontrado = false;
+			        
+			         // Usando un bucle for normal
+			        for (size_t j = 0; j < libros.size(); ++j) {
+			            if (libros[j].idLibro == r.idLibro) {
+			                nombreLibro = libros[j].nombreLibro;
+			                libroEncontrado = true;
+			                break; // Salimos del bucle una vez que encontramos el libro
+			            }
+			        }
+			
+			        // Si el libro no se encontró, podemos mostrar un mensaje por defecto
+			        if (!libroEncontrado) {
+			            nombreLibro = "No encontrado";
+			        }
+			        
+			        // Buscar el estudiante correspondiente usando el idEstudiante de la reserva
+			        std::string nombreEstudiante;
+			        bool estudianteEncontrado = false;
+			
+			        for (size_t k = 0; k < estudiantes.size(); ++k) {
+			            if (estudiantes[k].id == r.idEstudiante) {
+			                nombreEstudiante = estudiantes[k].nombre;
+			                estudianteEncontrado = true;
+			                break; // Salimos del bucle una vez que encontramos el estudiante
+			            }
+			        }
+			
+			        // Si el estudiante no se encontró, asignar un mensaje por defecto
+			        if (!estudianteEncontrado) {
+			            nombreEstudiante = "No encontrado";
+			        }
+			
+			        std::cout << "ID Reserva: " << r.idReserva
+			                  << ", Nombre Libro: " << nombreLibro
+			                  << ", Nombre Estudiante: " << nombreEstudiante
+			                  << ", Fecha Reserva: " << r.fechaReserva
+			                  << ", Fecha Expiración: " << r.fechaExpiracion
+			                  << ", Estado: " << (r.estado == 1 ? "Activo" : "Inactivo") << "\n";
+			    }
+}
+
 	    
 	    void eliminarReserva(int id) {
 		    for (size_t i = 0; i < reservas.size(); ++i) {
@@ -168,7 +219,7 @@
 			            std::cin >> r.idLibro;
 			
 			            // Mostrar opciones de estudiantes
-			            db.mostrarEstudiantes();
+			            db.mostrarOpcionesEstudiantes();
 			            std::cout << "Nuevo ID Estudiante: ";
 			            std::cin.ignore(); // Limpiar el búfer
 			            std::cin >> r.idEstudiante;
@@ -602,7 +653,7 @@
 	                    std::cout << "4. Actualizar Estudiante\n";
 	                    std::cout << "5. Volver\n";
 	                    std::cout << "Selecciona una opción: ";
-	                    std::cin.ignore() >> subopcion;
+	                    std::cin >> subopcion;
 	
 	                    if (subopcion == 1) {
 	                    	/*
@@ -761,7 +812,7 @@
 	                    std::cout << "4. Actualizar Categoría\n";
 	                    std::cout << "5. Volver\n";
 	                    std::cout << "Selecciona una opción: ";
-	                    std::cin.ignore() >> subopcion;
+	                    std::cin >> subopcion;
 	
 	                    if (subopcion == 1) {
 	                    	/*AGREGAR CATEGORIA*/
@@ -921,7 +972,7 @@
 	            std::cout << "4. Actualizar Reserva\n";
 	            std::cout << "5. Volver\n";
 	            std::cout << "Selecciona una opción: ";
-	            std::cin.ignore() >> subopcion;
+	            std::cin >> subopcion;
 	
 	            switch (subopcion) {
 	            	/*AGREGAR RESERVA*/
@@ -957,7 +1008,7 @@
 	                case 3:
 	                	/*ELIMINAR RESERVA*/
 	                	int id;
-	                    std::cout << "ID de libro a eliminar: ";
+	                    std::cout << "ID de reserva a eliminar: ";
 	                    std::cin.ignore() >> id;
 	                   db.eliminarReserva(id);
 	                    break;
