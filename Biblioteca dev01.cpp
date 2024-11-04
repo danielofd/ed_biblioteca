@@ -2,6 +2,7 @@
 	#include <vector>
 	#include <string>
 	#include <ctime>
+	#include <limits>
 	
 	class Estudiante {
 	public:
@@ -117,6 +118,9 @@
 	        agregarAutor("Gabriel García Márquez", "Colombiano");
 	        agregarAutor("Isabel Allende", "Chilena");
 	        agregarAutor("Stephen King", "Estadounidense");
+	        
+	        agregarLibro("Cien anos de soledad", 1,1,1,"espanol","1967");
+	        
 	    }
 	    
 	     // Métodos para manejar reservas
@@ -139,6 +143,53 @@
 	                      << ", Estado: " << (r.estado == 1 ? "Activo" : "Inactivo") << "\n";
 	        }
 	    }
+	    
+	    void eliminarReserva(int id) {
+		    for (size_t i = 0; i < reservas.size(); ++i) {
+		        if (reservas[i].idReserva == id) {
+		            reservas.erase(reservas.begin() + i);
+		            std::cout << "Reserva eliminada.\n";
+		            return;
+		        }
+		    }
+		    std::cout << "ID de reserva no válido.\n";
+		}
+		
+		void actualizarReserva(int id, BaseDeDatos& db) {
+			    for (size_t i = 0; i < reservas.size(); ++i) {
+			        if (reservas[i].idReserva == id) {
+			            Reserva& r = reservas[i];
+			            std::cout << "Actualizar Reserva (ID: " << id << ")\n";
+			
+			            // Mostrar opciones de libros
+			            db.mostrarOpcionesLibros();
+			            std::cout << "Nuevo ID Libro: ";
+			            std::cin.ignore(); // Limpiar el búfer
+			            std::cin >> r.idLibro;
+			
+			            // Mostrar opciones de estudiantes
+			            db.mostrarEstudiantes();
+			            std::cout << "Nuevo ID Estudiante: ";
+			            std::cin.ignore(); // Limpiar el búfer
+			            std::cin >> r.idEstudiante;
+			
+			            std::cout << "Nueva Fecha de Reserva: ";
+			            std::cin.ignore(); // Limpiar el búfer
+			            std::getline(std::cin, r.fechaReserva); // Leer la fecha de reserva
+			
+			            std::cout << "Nueva Fecha de Expiración: ";
+			            std::getline(std::cin, r.fechaExpiracion); // Leer la fecha de expiración
+			
+			            std::cout << "Nuevo Estado (1 para activo, 0 para inactivo): ";
+			            std::cin >> r.estado;
+			
+			            std::cout << "Reserva actualizada.\n";
+			            return;
+			        }
+			    }
+			    std::cout << "ID de reserva no válido.\n";
+			}
+
 	    
 		const std::vector<Carrera>& obtenerCarreras() const {
 	        return carreras;
@@ -504,6 +555,25 @@
 	            std::cout << categorias[i].idCategoria << ": " << categorias[i].nombreCategoria << "\n";
 	        }
 	    }
+	    
+	    void mostrarOpcionesLibros() {
+	    std::cout << "Selecciona un libro:\n";
+		    for (size_t i = 0; i < libros.size(); ++i) {
+	        std::cout << "ID: " << libros[i].idLibro << ", Título: " << libros[i].nombreLibro << "\n";
+    	}
+		}
+		
+ 							void mostrarOpcionesEstudiantes() {
+							    std::cout << "Selecciona un estudiante:\n";
+							    for (size_t i = 0; i < estudiantes.size(); ++i) {
+							        std::cout << "ID: " << estudiantes[i].id << ", Nombre: " << estudiantes[i].nombre << "\n";
+							    }
+							}
+
+ 			
+ 			
+ 			
+
 	};
 	
 	void menu(BaseDeDatos& db) {
@@ -782,32 +852,33 @@
 	                    std::cout << "4. Actualizar Libro\n";
 	                    std::cout << "5. Volver\n";
 	                    std::cout << "Selecciona una opción: ";
-	                    std::cin.ignore() >> subopcion;
+	                    std::cin >> subopcion;
 	
 	                    if (subopcion == 1) {
 	                    	/*AGREGA LIBRO*/
 										std::string nombreLibro, idioma, fechaPublicacion;
 	
 										// Limpiar el buffer antes de pedir el nombre del libro
+										
 										std::cout << "Nombre del Libro: ";
 										std::getline(std::cin.ignore(), nombreLibro); // Usar getline para permitir espacios
 										
 										db.mostrarOpcionesAutores();
 										int idAutor;
-										std::cout << "Selecciona ID Autor: ";
-										std::cin.ignore() >> idAutor;
+										std::cout << "Selecciona ID Autor:\n";
+										std::cin >> idAutor;
 										std::cin.ignore(); // Limpiar el buffer de entrada
 										
 										db.mostrarOpcionesEditoriales();
 										int idEditorial;
 										std::cout << "Selecciona ID Editorial: ";
-										std::cin.ignore() >> idEditorial;
+										std::cin >> idEditorial;
 										std::cin.ignore(); // Limpiar el buffer de entrada
 										
 										db.mostrarOpcionesCategorias();
 										int idCategoria;
 										std::cout << "Selecciona ID Categoría: ";
-										std::cin.ignore() >> idCategoria;
+										std::cin >> idCategoria;
 										std::cin.ignore(); // Limpiar el buffer de entrada
 										
 										std::cout << "Idioma: ";
@@ -860,8 +931,11 @@
 	                    std::string fechaReserva, fechaExpiracion;
 	
 	                    // Obtener información de la reserva
+	                    db.mostrarOpcionesLibros();
 	                    std::cout << "ID Libro: ";
 	                    std::cin.ignore() >> idLibro;
+	                    
+	                    db.mostrarOpcionesEstudiantes();
 	                    std::cout << "ID Estudiante: ";
 	                    std::cin.ignore() >> idEstudiante;
 	                    std::cout << "Fecha Reserva (dd/mm/yyyy): ";
@@ -881,16 +955,18 @@
 	                    db.mostrarReservas();
 	                    break;
 	                case 3:
-	                    // Implementar la lógica para eliminar una reserva
+	                	/*ELIMINAR RESERVA*/
+	                	int id;
+	                    std::cout << "ID de libro a eliminar: ";
+	                    std::cin.ignore() >> id;
+	                   db.eliminarReserva(id);
 	                    break;
 	                case 4:
-	                    // Implementar la lógica para actualizar una reserva
-	                    break;
-	                case 5:
-	                    // Volver al menú principal
-	                    break;
-	                default:
-	                    std::cout << "Opción no válida. Por favor, selecciona de nuevo.\n";
+	                    /*MODIFICA LIBRO*/
+	                        
+	                        std::cout << "ID de la reserva a actualizar: ";
+	                        std::cin.ignore() >> id;
+	                    db.actualizarReserva(id,db);
 	                    break;
 	            }
 	        } while (subopcion != 5);
