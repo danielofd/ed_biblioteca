@@ -7,10 +7,15 @@ using namespace std;
 
 class Carrera
 {
+private:
+    ConexionDB conn;
+    MYSQL_ROW row;
+    MYSQL_RES *res;
 
 public:
     int idCarrera;
     string nombreCarrera;
+    int state = 0;
 
     Carrera() {}
 
@@ -20,8 +25,7 @@ public:
     // METODO PARA AGREGAR CARRERA
     void agregarCarrera()
     {
-        int state = 0;
-        ConexionDB conn = ConexionDB();
+        conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
@@ -41,23 +45,13 @@ public:
                 cout << "Error, vuelvalo a intentar..." << endl;
             }
         }
-        else
-        {
-            system("color c");
-            cout << "Error..." << endl;
-        }
-
         conn.close_connection();
     }
 
     // METODO PARA MOSTRAR CARRERA
     void mostrarCarrera()
     {
-        int state = 0;
-        ConexionDB conn = ConexionDB();
-        MYSQL_ROW row;
-        MYSQL_RES *res;
-
+        conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
@@ -84,23 +78,13 @@ public:
                 cout << "Error, vuelvalo a intentar..." << endl;
             }
         }
-        else
-        {
-            system("color c");
-            cout << "Error..." << endl;
-        }
-
         conn.close_connection();
     }
 
     // METODO PARA MOSTRAR CARRERA POR ID
     int mostrarCarreraPorId(int id)
     {
-        int state = 0;
-        ConexionDB conn = ConexionDB();
-        MYSQL_ROW row;
-        MYSQL_RES *res;
-
+        conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
@@ -119,18 +103,42 @@ public:
                 }
                 else
                 {
-                    cout << "\nNo se encontró ningún registro con ID = " << id << endl;
+                    cout << "\nNo se encontro ninguna carrera con ID = " << id << endl;
                     return 0;
                 }
                 // Liberar el resultado después de usarlo
                 mysql_free_result(res);
             }
         }
-        else
+        conn.close_connection();
+        return 0;
+    }
+
+    // METODO PARA VERIFICAR SI EXISTE CARRERA POR ID
+    int verificarCarrera(int id)
+    {
+        conn = ConexionDB();
+        conn.open_connection();
+
+        if (conn.getConnector())
         {
-            system("color c");
-            cout << "Error..." << endl;
-            return 0;
+            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            const char *c = sql.c_str();
+            state = mysql_query(conn.getConnector(), c);
+            if (!state)
+            {
+                res = mysql_store_result(conn.getConnector());
+                if ((row = mysql_fetch_row(res)) != nullptr)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+                // Liberar el resultado después de usarlo
+                mysql_free_result(res);
+            }
         }
         conn.close_connection();
         return 0;
@@ -139,8 +147,7 @@ public:
     // METODO PARA ACTUALIZAR CARRERA
     void actualizarCarrera(int id)
     {
-        int state = 0;
-        ConexionDB conn = ConexionDB();
+        conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
@@ -160,20 +167,13 @@ public:
                 cout << "Error, vuelvalo a intentar..." << endl;
             }
         }
-        else
-        {
-            system("color c");
-            cout << "Error..." << endl;
-        }
-
         conn.close_connection();
     }
 
     // METODO PARA ELIMININAR CARRERA
     void eliminarCarrera(int id)
     {
-        int state = 0;
-        ConexionDB conn = ConexionDB();
+        conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
@@ -193,12 +193,6 @@ public:
                 cout << "Error, vuelvalo a intentar..." << endl;
             }
         }
-        else
-        {
-            system("color c");
-            cout << "Error..." << endl;
-        }
-
         conn.close_connection();
     }
 };

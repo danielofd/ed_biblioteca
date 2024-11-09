@@ -1,119 +1,58 @@
 #include <iostream>
-#include "headers\Carrera.h"
+#include <conio.h>
+#include <cstdlib>
+#include "headers\Menu.h"
+#include "headers\Login.h"
 
 using namespace std;
 
 int main(int argc, char const *argv[])
 {
+	string usuario;
+	string password;
+	char caracter;
 
-	int opcion;
+	Login login = Login();
+	Menu menu = Menu();
 
-	do
+	while (true)
 	{
-		cout << "\nMenú Principal:\n";
-		cout << "1. Estudiantes\n";
-		cout << "2. Carreras\n";
-		cout << "3. Editoriales\n";
-		cout << "4. Categorías\n";
-		cout << "5. Autores\n";
-		cout << "6. Libros\n";
-		cout << "7. Reservas\n"; // Nueva opción para reservas
-		cout << "8. Salir\n";
-		cout << "Selecciona una opción: ";
-		cin >> opcion;
+		cout << "\n------------------Login------------------\n";
+		cout << "Ingrese el nombre de usuario: ";
+		cin >> usuario;
+		cout << "Ingrese la contrasena: ";
 
-		switch (opcion)
+		// Todo lo que esta dentro del bucle while es para ocultar la contraseña con un asterisco *
+		caracter = getch();
+		password = "";
+		while (caracter != 13) // El numero 13 representa la tecla ENTER
 		{
-		case 1:
-		{
-			int subOpcion;
-			do
+			if (caracter != 8) // El numero 8 representa la tecla BACKSPACE
 			{
-				cout << "\nSubmenú Estudiantes:\n";
-				cout << "1. Agregar Estudiante\n";
-				cout << "2. Mostrar Estudiantes\n";
-				cout << "3. Eliminar Estudiante\n";
-				cout << "4. Actualizar Estudiante\n";
-				cout << "5. Volver\n";
-				cout << "Selecciona una opción: ";
-				cin >> subOpcion;
-
-			} while (subOpcion != 5);
-			break;
-		}
-
-		case 2:
-		{
-			int subOpcion;
-			int idCarrera;
-			string nombreCarrera;
-			Carrera carrera; // Objeto Carrera
-			do
+				password.push_back(caracter);
+				cout << "*";
+			}
+			else
 			{
-				cout << "\nSubmenú Carreras:\n";
-				cout << "1. Agregar Carrera\n";
-				cout << "2. Consultar Carrera\n";
-				cout << "3. Mostrar Todas las Carreras\n";
-				cout << "4. Eliminar Carrera\n";
-				cout << "5. Actualizar Carrera\n";
-				cout << "6. Volver\n";
-				cout << "Selecciona una opción: ";
-				cin >> subOpcion;
-
-				if (subOpcion == 1)
+				if (password.length() > 0) // Este bloque sirve para borrar caracteres en caso de equivocarse en la contraseña
 				{
-					/*AGREGAR NUEVA CARRERA*/
-					cout << "Nombre Carrera: ";
-					getline(cin, nombreCarrera);
-					getline(cin, nombreCarrera); // Esto es para evitar el bucle infinito...
-					carrera = Carrera(nombreCarrera);
-					carrera.agregarCarrera();
+					cout << "\b \b";
+					password.pop_back();
 				}
-				else if (subOpcion == 2)
-				{
-					cout << "ID Carrera a Consultar: ";
-					cin >> idCarrera;
-					carrera.mostrarCarreraPorId(idCarrera);
-				}
-				else if (subOpcion == 3)
-				{
-					carrera.mostrarCarrera();
-				}
-				else if (subOpcion == 4)
-				{
-					cout << "ID Carrera: ";
-					cin >> idCarrera;
-					cin.ignore();
-					carrera.eliminarCarrera(idCarrera);
-				}
-				else if (subOpcion == 5)
-				{
-					cout << "ID Carrera: ";
-					cin >> idCarrera;
-					cin.ignore();
-					cout << "Nombre Nuevo de Carrera: ";
-					getline(cin, nombreCarrera);
-					carrera = Carrera(nombreCarrera);
-					carrera.actualizarCarrera(idCarrera);
-				}
-
-			} while (subOpcion != 6);
-			break;
+			}
+			caracter = getch();
 		}
 
-		case 3:
+		// Se valida si el usuario existe en base de datos
+		if (login.iniciarSesion(usuario, password) == 1)
 		{
-			break;
+			system("cls"); // Esta linea limpia la consola
+			menu.menuPrincipal();
+			// break;
 		}
-
-		case 8:
-			cout << "Saliendo...\n";
-			break;
-
-		default:
-			cout << "Opción no válida. Inténtalo de nuevo.\n";
-			break;
+		else
+		{
+			std::cout << "\nUsuario o contrasena incorrectos. Intente de nuevo.\n";
 		}
-
-	} while (opcion != 8);
+	}
 }

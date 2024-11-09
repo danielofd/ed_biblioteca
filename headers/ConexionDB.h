@@ -1,23 +1,29 @@
+#pragma once
 #include <iostream>
 #include <mysql.h>
 
 using namespace std;
 
-class ConexionDB {
+class ConexionDB
+{
 
-    private : MYSQL* connector;
+private:
+    MYSQL *connector;
 
-    public : void open_connection() {
+public:
+    void open_connection()
+    {
         connector = mysql_init(0);
         connector = mysql_real_connect(connector, "localhost", "root", "WorkbenchSQL", "biblioteca", 0, NULL, 0);
     }
 
-    public : MYSQL* getConnector() {
+    MYSQL *getConnector()
+    {
         return connector;
     }
 
-    public : void close_connection() {
+    void close_connection()
+    {
         mysql_close(connector);
     }
-
 };
