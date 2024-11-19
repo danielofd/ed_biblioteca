@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -6,7 +5,7 @@
 
 using namespace std;
 
-class Carrera
+class Autor
 {
 private:
     ConexionDB conn;
@@ -14,31 +13,31 @@ private:
     MYSQL_RES *res;
 
 public:
-    int idCarrera;
-    string nombreCarrera;
+    int idAutor;
+    string nombreAutor, nacionalidad;
     int state = 0;
 
-    Carrera() {}
+    Autor() {}
 
-    Carrera(string n)
-        : nombreCarrera(n) {}
+    Autor(string n, string m)
+        : nombreAutor(n), nacionalidad(m) {}
 
-    // METODO PARA AGREGAR CARRERA
-    void agregarCarrera()
+    // METODO PARA AGREGAR AUTOR
+    void agregarAutor()
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "insert into carreras (Nombre_Carrera) values ('" + nombreCarrera + "');";
+            string sql = "insert into autores (Nombre_Autor, Nacionalidad_A) values ('" + nombreAutor + "','" + nacionalidad + "');";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
 
             if (!state)
             {
                 system("color a");
-                cout << "\nCarrera registrada exitosamente!" << endl;
+                cout << "\nAutor registrado exitosamente!" << endl;
             }
             else
             {
@@ -49,8 +48,8 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA MOSTRAR CARRERA
-    void mostrarCarreras()
+    // METODO PARA MOSTRAR AUTORES
+    void mostrarAutores()
     {
         conn = ConexionDB();
         conn.open_connection();
@@ -58,9 +57,9 @@ public:
         if (conn.getConnector())
         {
             system("color a");
-            cout << "-------------------------Listado de Carreras-------------------------" << endl;
+            cout << "-------------------------Listado de Autores-------------------------" << endl;
 
-            string sql = "select * from carreras;";
+            string sql = "select * from autores;";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
 
@@ -70,7 +69,7 @@ public:
 
                 while (row = mysql_fetch_row(res))
                 {
-                    cout << row[0] << ", " << row[1] << endl;
+                    cout << row[0] << ", " << row[1] << ", " << row[2] << endl;
                 }
             }
             else
@@ -82,15 +81,15 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA MOSTRAR CARRERA POR ID
-    int mostrarCarreraPorId(int id)
+    // METODO PARA MOSTRAR AUTOR POR ID
+    void mostrarAutorPorId(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            string sql = "select * from autores where ID_Autor = " + to_string(id) + ";";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -99,31 +98,28 @@ public:
                 if ((row = mysql_fetch_row(res)) != nullptr)
                 {
                     // Mostrar el registro encontrado
-                    cout << "\nID_Carrera: " << row[0] << ", Nombre_Carrera: " << row[1] << endl;
-                    return 1;
+                    cout << "\nID_Autor: " << row[0] << ", Nombre_Autor: " << row[1] << ", Nacionalidad: " << row[2] << endl;
                 }
                 else
                 {
                     cout << "\nNo se encontro ningun registro con ID = " << id << endl;
-                    return 0;
                 }
                 // Liberar el resultado después de usarlo
                 mysql_free_result(res);
             }
         }
         conn.close_connection();
-        return 0;
     }
 
-    // METODO PARA MOSTRAR CARRERA POR NOMBRE DE CARRERA
-    int mostrarCarreraPorNombre(string nombre)
+    // METODO PARA MOSTRAR AUTOR POR NOMBRE
+    void mostrarAutorPorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where Nombre_Carrera like '%" + nombre + "%';";
+            string sql = "select * from autores where Nombre_Autor like '%" + nombre + "%';";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -154,18 +150,58 @@ public:
             }
         }
         conn.close_connection();
-        return 0;
     }
 
-    // METODO PARA VERIFICAR SI EXISTE CARRERA POR ID
-    bool verificarCarrera(int id)
+    // METODO PARA MOSTRAR AUTOR POR NACIONALIDAD
+    void mostrarAutorPorNacionalidad(string nacionalidad)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            string sql = "select * from autores where Nacionalidad_A like '%" + nacionalidad + "%';";
+            const char *c = sql.c_str();
+            state = mysql_query(conn.getConnector(), c);
+            if (!state)
+            {
+                res = mysql_store_result(conn.getConnector());
+
+                if (res)
+                {
+                    bool found = false;
+                    while ((row = mysql_fetch_row(res)) != nullptr)
+                    {
+                        cout << "\n"
+                             << row[0] << ", " << row[1] << ", " << row[2];
+                        found = true;
+                    }
+                    cout << endl;
+                    if (!found)
+                    {
+                        cout << "\nNo se encontro ningun registro con Nacionalidad = " << nacionalidad << endl;
+                    }
+                    // Liberar el resultado después de usarlo
+                    mysql_free_result(res);
+                }
+                else
+                {
+                    cout << "\nError al obtener el resultado de la consulta." << endl;
+                }
+            }
+        }
+        conn.close_connection();
+    }
+
+    // METODO PARA VERIFICAR SI EXISTE AUTOR POR ID
+    bool verificarAutor(int id)
+    {
+        conn = ConexionDB();
+        conn.open_connection();
+
+        if (conn.getConnector())
+        {
+            string sql = "select * from autores where ID_Autor = " + to_string(id) + ";";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -187,24 +223,24 @@ public:
         return false;
     }
 
-    // METODO PARA ACTUALIZAR CARRERA
-    void actualizarCarrera(int id)
+    // METODO PARA ACTUALIZAR AUTOR
+    void actualizarAutor(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
-        if (verificarCarrera(id))
+        if (verificarAutor(id))
         {
             if (conn.getConnector())
             {
-                string sql = "update carreras set Nombre_Carrera ='" + nombreCarrera + "' where ID_Carrera =" + to_string(id) + ";";
+                string sql = "update autores set Nombre_Autor ='" + nombreAutor + "', Nacionalidad_A ='" + nacionalidad + "' where ID_Autor =" + to_string(id) + ";";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
                 if (!state)
                 {
                     system("color a");
-                    cout << "\nCarrera actualizada exitosamente!" << endl;
+                    cout << "\nAutor actualizado exitosamente!" << endl;
                 }
                 else
                 {
@@ -215,29 +251,29 @@ public:
         }
         else
         {
-            cout << "\nNo se encontro carrera con dicho ID" << endl;
+            cout << "\nNo se encontro autor con dicho ID" << endl;
         }
         conn.close_connection();
     }
 
-    // METODO PARA ELIMININAR CARRERA
-    void eliminarCarrera(int id)
+    // METODO PARA ELIMININAR AUTOR
+    void eliminarAutor(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
-        if (verificarCarrera(id))
+        if (verificarAutor(id))
         {
             if (conn.getConnector())
             {
-                string sql = "delete from carreras where ID_Carrera =" + to_string(id) + ";";
+                string sql = "delete from autores where ID_Autor =" + to_string(id) + ";";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
                 if (!state)
                 {
                     system("color a");
-                    cout << "\nCarrera eliminada exitosamente!" << endl;
+                    cout << "\nAutor eliminado exitosamente!" << endl;
                 }
                 else
                 {
@@ -248,45 +284,46 @@ public:
         }
         else
         {
-            cout << "\nNo se encontro carrera con dicho ID" << endl;
+            cout << "\nNo se encontro autor con dicho ID" << endl;
         }
         conn.close_connection();
     }
 
-    // ESTE ES EL MENU DE CARRERAS
-    void menuCarrera()
+    void menuAutor()
     {
         int subOpcion, subO;
-        int idCarrera;
-        string nombreCarrera;
-        Carrera carrera; // Objeto Carrera
+        int idAutor;
+        string nombreAutor, nacionalidad;
+        Autor autor;
 
         do
         {
-            cout << "\nSubmenu Carreras:\n";
-            cout << "1. Agregar Carrera\n";
-            cout << "2. Consultar Carrera\n";
-            cout << "3. Mostrar Todas las Carreras\n";
-            cout << "4. Eliminar Carrera\n";
-            cout << "5. Actualizar Carrera\n";
+            cout << "\nSubmenu Autor:\n";
+            cout << "1. Agregar Autor\n";
+            cout << "2. Consultar Autor\n";
+            cout << "3. Mostrar Todos los Autores\n";
+            cout << "4. Eliminar Autor\n";
+            cout << "5. Actualizar Autor\n";
             cout << "6. Volver\n";
             cout << "Selecciona una opcion: ";
             cin >> subOpcion;
 
             if (subOpcion == 1)
             {
-                /*AGREGAR NUEVA CARRERA*/
-                cout << "\nNombre Carrera: ";
-                getline(cin, nombreCarrera);
-                getline(cin, nombreCarrera); // Esto es para evitar el bucle infinito...
-                carrera = Carrera(nombreCarrera);
-                carrera.agregarCarrera();
+                cout << "\nNombre Autor: ";
+                getline(cin, nombreAutor);
+                getline(cin, nombreAutor);
+                cout << "Nacionalidad: ";
+                getline(cin, nacionalidad); // Esto es para evitar el bucle infinito...
+                autor = Autor(nombreAutor, nacionalidad);
+                autor.agregarAutor();
             }
             else if (subOpcion == 2)
             {
                 cout << "\n1.Consultar por ID\n";
                 cout << "2.Consultar por Nombre\n";
-                cout << "3.Volver\n";
+                cout << "3.Consultar por Nacionalidad\n";
+                cout << "4.Volver\n";
                 cout << "Selecciona una opcion: ";
                 cin >> subO;
 
@@ -294,17 +331,25 @@ public:
                 {
                     if (subO == 1)
                     {
-                        cout << "\nID Carrera a Consultar: ";
-                        cin >> idCarrera;
-                        carrera.mostrarCarreraPorId(idCarrera);
+                        cout << "\nID Autor a Consultar: ";
+                        cin >> idAutor;
+                        autor.mostrarAutorPorId(idAutor);
                         break;
                     }
                     else if (subO == 2)
                     {
-                        cout << "\nNombre Carrera a Consultar: ";
-                        getline(cin, nombreCarrera);
-                        getline(cin, nombreCarrera);
-                        carrera.mostrarCarreraPorNombre(nombreCarrera);
+                        cout << "\nNombre Autor a Consultar: ";
+                        getline(cin, nombreAutor);
+                        getline(cin, nombreAutor);
+                        autor.mostrarAutorPorNombre(nombreAutor);
+                        break;
+                    }
+                    else if (subO == 3)
+                    {
+                        cout << "\nNacionalidad Autor a Consultar: ";
+                        getline(cin, nacionalidad);
+                        getline(cin, nacionalidad);
+                        autor.mostrarAutorPorNacionalidad(nacionalidad);
                         break;
                     }
                     else
@@ -313,29 +358,31 @@ public:
                         break;
                     }
 
-                } while (subO != 3);
+                } while (subO != 4);
             }
             else if (subOpcion == 3)
             {
                 cout << endl;
-                carrera.mostrarCarreras();
+                autor.mostrarAutores();
             }
             else if (subOpcion == 4)
             {
-                cout << "\nID Carrera a eliminar: ";
-                cin >> idCarrera;
+                cout << "\nID Autor a eliminar: ";
+                cin >> idAutor;
                 cin.ignore();
-                carrera.eliminarCarrera(idCarrera);
+                autor.eliminarAutor(idAutor);
             }
             else if (subOpcion == 5)
             {
-                cout << "\nID Carrera a modificar: ";
-                cin >> idCarrera;
+                cout << "\nID Autor a modificar: ";
+                cin >> idAutor;
                 cin.ignore();
-                cout << "Nombre Nuevo de Carrera: ";
-                getline(cin, nombreCarrera);
-                carrera = Carrera(nombreCarrera);
-                carrera.actualizarCarrera(idCarrera);
+                cout << "Nombre Nuevo de Autor: ";
+                getline(cin, nombreAutor);
+                cout << "Nacionalidad Nueva de Autor: ";
+                getline(cin, nacionalidad);
+                autor = Autor(nombreAutor, nacionalidad);
+                autor.actualizarAutor(idAutor);
             }
             else if (subOpcion != 6)
             {
@@ -345,3 +392,4 @@ public:
         } while (subOpcion != 6);
     }
 };
+

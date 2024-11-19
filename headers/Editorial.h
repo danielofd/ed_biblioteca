@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -6,7 +5,7 @@
 
 using namespace std;
 
-class Carrera
+class Editorial
 {
 private:
     ConexionDB conn;
@@ -14,31 +13,31 @@ private:
     MYSQL_RES *res;
 
 public:
-    int idCarrera;
-    string nombreCarrera;
+    int idEditorial;
+    string nombreEditorial;
     int state = 0;
 
-    Carrera() {}
+    Editorial() {}
 
-    Carrera(string n)
-        : nombreCarrera(n) {}
+    Editorial(string n)
+        : nombreEditorial(n) {}
 
-    // METODO PARA AGREGAR CARRERA
-    void agregarCarrera()
+    // METODO PARA AGREGAR EDITORIAL
+    void agregarEditorial()
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "insert into carreras (Nombre_Carrera) values ('" + nombreCarrera + "');";
+            string sql = "insert into editoriales (Nombre_Editorial) values ('" + nombreEditorial + "');";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
 
             if (!state)
             {
                 system("color a");
-                cout << "\nCarrera registrada exitosamente!" << endl;
+                cout << "\nEditorial registrada exitosamente!" << endl;
             }
             else
             {
@@ -49,8 +48,8 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA MOSTRAR CARRERA
-    void mostrarCarreras()
+    // METODO PARA MOSTRAR EDITORIALES
+    void mostrarEditoriales()
     {
         conn = ConexionDB();
         conn.open_connection();
@@ -58,9 +57,9 @@ public:
         if (conn.getConnector())
         {
             system("color a");
-            cout << "-------------------------Listado de Carreras-------------------------" << endl;
+            cout << "-------------------------Listado de Editoriales-------------------------" << endl;
 
-            string sql = "select * from carreras;";
+            string sql = "select * from editoriales;";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
 
@@ -82,15 +81,15 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA MOSTRAR CARRERA POR ID
-    int mostrarCarreraPorId(int id)
+    // METODO PARA MOSTRAR EDITORIAL POR ID
+    int mostrarEditorialPorId(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            string sql = "select * from editoriales where ID_Editorial = " + to_string(id) + ";";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -99,7 +98,7 @@ public:
                 if ((row = mysql_fetch_row(res)) != nullptr)
                 {
                     // Mostrar el registro encontrado
-                    cout << "\nID_Carrera: " << row[0] << ", Nombre_Carrera: " << row[1] << endl;
+                    cout << "\nID_Editorial: " << row[0] << ", Nombre_Editorial: " << row[1] << endl;
                     return 1;
                 }
                 else
@@ -115,15 +114,15 @@ public:
         return 0;
     }
 
-    // METODO PARA MOSTRAR CARRERA POR NOMBRE DE CARRERA
-    int mostrarCarreraPorNombre(string nombre)
+    // METODO PARA MOSTRAR EDITORIAL POR NOMBRE
+    int mostrarEditorialPorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where Nombre_Carrera like '%" + nombre + "%';";
+            string sql = "select * from editoriales where Nombre_Editorial like '%" + nombre + "%';";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -157,15 +156,15 @@ public:
         return 0;
     }
 
-    // METODO PARA VERIFICAR SI EXISTE CARRERA POR ID
-    bool verificarCarrera(int id)
+    // METODO PARA VERIFICAR SI EXISTE EDITORIAL POR ID
+    bool verificarEditorial(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            string sql = "select * from editoriales where ID_Editorial = " + to_string(id) + ";";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -187,24 +186,24 @@ public:
         return false;
     }
 
-    // METODO PARA ACTUALIZAR CARRERA
-    void actualizarCarrera(int id)
+    // METODO PARA ACTUALIZAR EDITORIAL
+    void actualizarEditorial(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
-        if (verificarCarrera(id))
+        if (verificarEditorial(id))
         {
             if (conn.getConnector())
             {
-                string sql = "update carreras set Nombre_Carrera ='" + nombreCarrera + "' where ID_Carrera =" + to_string(id) + ";";
+                string sql = "update editoriales set Nombre_Editorial ='" + nombreEditorial + "' where ID_Editorial =" + to_string(id) + ";";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
                 if (!state)
                 {
                     system("color a");
-                    cout << "\nCarrera actualizada exitosamente!" << endl;
+                    cout << "\nEditorial actualizada exitosamente!" << endl;
                 }
                 else
                 {
@@ -215,29 +214,29 @@ public:
         }
         else
         {
-            cout << "\nNo se encontro carrera con dicho ID" << endl;
+            cout << "\nNo se encontro editorial con dicho ID" << endl;
         }
         conn.close_connection();
     }
 
-    // METODO PARA ELIMININAR CARRERA
-    void eliminarCarrera(int id)
+    // METODO PARA ELIMININAR EDITORIAL
+    void eliminarEditorial(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
-        if (verificarCarrera(id))
+        if (verificarEditorial(id))
         {
             if (conn.getConnector())
             {
-                string sql = "delete from carreras where ID_Carrera =" + to_string(id) + ";";
+                string sql = "delete from editoriales where ID_Editorial =" + to_string(id) + ";";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
                 if (!state)
                 {
                     system("color a");
-                    cout << "\nCarrera eliminada exitosamente!" << endl;
+                    cout << "\nEditorial eliminada exitosamente!" << endl;
                 }
                 else
                 {
@@ -248,39 +247,38 @@ public:
         }
         else
         {
-            cout << "\nNo se encontro carrera con dicho ID" << endl;
+            cout << "\nNo se encontro editorial con dicho ID" << endl;
         }
         conn.close_connection();
     }
 
-    // ESTE ES EL MENU DE CARRERAS
-    void menuCarrera()
+    // ESTE ES EL MENU DE EDITORIAL
+    void menuEditorial()
     {
         int subOpcion, subO;
-        int idCarrera;
-        string nombreCarrera;
-        Carrera carrera; // Objeto Carrera
+        int idEditorial;
+        string nombreEditorial;
+        Editorial editorial;
 
         do
         {
-            cout << "\nSubmenu Carreras:\n";
-            cout << "1. Agregar Carrera\n";
-            cout << "2. Consultar Carrera\n";
-            cout << "3. Mostrar Todas las Carreras\n";
-            cout << "4. Eliminar Carrera\n";
-            cout << "5. Actualizar Carrera\n";
+            cout << "\nSubmenu Editorial:\n";
+            cout << "1. Agregar Editorial\n";
+            cout << "2. Consultar Editorial\n";
+            cout << "3. Mostrar Todas las Editoriales\n";
+            cout << "4. Eliminar Editorial\n";
+            cout << "5. Actualizar Editorial\n";
             cout << "6. Volver\n";
             cout << "Selecciona una opcion: ";
             cin >> subOpcion;
 
             if (subOpcion == 1)
             {
-                /*AGREGAR NUEVA CARRERA*/
-                cout << "\nNombre Carrera: ";
-                getline(cin, nombreCarrera);
-                getline(cin, nombreCarrera); // Esto es para evitar el bucle infinito...
-                carrera = Carrera(nombreCarrera);
-                carrera.agregarCarrera();
+                cout << "\nNombre Editorial: ";
+                getline(cin, nombreEditorial);
+                getline(cin, nombreEditorial); // Esto es para evitar el bucle infinito...
+                editorial = Editorial(nombreEditorial);
+                editorial.agregarEditorial();
             }
             else if (subOpcion == 2)
             {
@@ -294,17 +292,17 @@ public:
                 {
                     if (subO == 1)
                     {
-                        cout << "\nID Carrera a Consultar: ";
-                        cin >> idCarrera;
-                        carrera.mostrarCarreraPorId(idCarrera);
+                        cout << "\nID Editorial a Consultar: ";
+                        cin >> idEditorial;
+                        editorial.mostrarEditorialPorId(idEditorial);
                         break;
                     }
                     else if (subO == 2)
                     {
-                        cout << "\nNombre Carrera a Consultar: ";
-                        getline(cin, nombreCarrera);
-                        getline(cin, nombreCarrera);
-                        carrera.mostrarCarreraPorNombre(nombreCarrera);
+                        cout << "\nNombre Editorial a Consultar: ";
+                        getline(cin, nombreEditorial);
+                        getline(cin, nombreEditorial);
+                        editorial.mostrarEditorialPorNombre(nombreEditorial);
                         break;
                     }
                     else
@@ -318,24 +316,24 @@ public:
             else if (subOpcion == 3)
             {
                 cout << endl;
-                carrera.mostrarCarreras();
+                editorial.mostrarEditoriales();
             }
             else if (subOpcion == 4)
             {
-                cout << "\nID Carrera a eliminar: ";
-                cin >> idCarrera;
+                cout << "\nID Editorial a eliminar: ";
+                cin >> idEditorial;
                 cin.ignore();
-                carrera.eliminarCarrera(idCarrera);
+                editorial.eliminarEditorial(idEditorial);
             }
             else if (subOpcion == 5)
             {
-                cout << "\nID Carrera a modificar: ";
-                cin >> idCarrera;
+                cout << "\nID Editorial a modificar: ";
+                cin >> idEditorial;
                 cin.ignore();
-                cout << "Nombre Nuevo de Carrera: ";
-                getline(cin, nombreCarrera);
-                carrera = Carrera(nombreCarrera);
-                carrera.actualizarCarrera(idCarrera);
+                cout << "Nombre Nuevo de Editorial: ";
+                getline(cin, nombreEditorial);
+                editorial = Editorial(nombreEditorial);
+                editorial.actualizarEditorial(idEditorial);
             }
             else if (subOpcion != 6)
             {

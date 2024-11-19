@@ -1,12 +1,22 @@
 #include <iostream>
 #include <cstdlib>
 #include "Carrera.h"
+#include "Editorial.h"
+#include "Categoria.h"
+#include "Autor.h"
+#include "Estudiante.h"
 
 using namespace std;
 
 class Menu
 {
 public:
+    Estudiante estudiante;
+    Carrera carrera;
+    Editorial editorial;
+    Categoria categoria;
+    Autor autor;
+
     void menuPrincipal()
     {
         int opcion;
@@ -14,14 +24,15 @@ public:
         do
         {
             cout << "\nMenu Principal:\n";
-            cout << "1. Estudiantes\n";
-            cout << "2. Carreras\n";
-            cout << "3. Editoriales\n";
-            cout << "4. Categorias\n";
-            cout << "5. Autores\n";
+            cout << "1. Estudiantes\n";//listo
+            cout << "2. Carreras\n";//listo
+            cout << "3. Editoriales\n";//listo
+            cout << "4. Categorias\n";//listo
+            cout << "5. Autores\n";//listo
             cout << "6. Libros\n";
-            cout << "7. Reservas\n"; // Nueva opción para reservas
-            cout << "8. Salir\n";
+            cout << "7. Reservas\n"; 
+            cout << "8. Volver al login\n";//listo
+            cout << "9. Finalizar\n";//listo
             cout << "Selecciona una opcion: ";
             cin >> opcion;
 
@@ -29,111 +40,48 @@ public:
             {
             case 1:
             {
-                int subOpcion;
-                do
-                {
-                    cout << "\nSubmenú Estudiantes:\n";
-                    cout << "1. Agregar Estudiante\n";
-                    cout << "2. Mostrar Estudiantes\n";
-                    cout << "3. Eliminar Estudiante\n";
-                    cout << "4. Actualizar Estudiante\n";
-                    cout << "5. Volver\n";
-                    cout << "Selecciona una opción: ";
-                    cin >> subOpcion;
-
-                } while (subOpcion != 5);
+                estudiante = Estudiante();
+                estudiante.menuEstudiante();
                 break;
             }
-
             case 2:
             {
-                int subOpcion;
-                int idCarrera;
-                string nombreCarrera;
-                Carrera carrera; // Objeto Carrera
-                do
-                {
-                    cout << "\nSubmenu Carreras:\n";
-                    cout << "1. Agregar Carrera\n";
-                    cout << "2. Consultar Carrera\n";
-                    cout << "3. Mostrar Todas las Carreras\n";
-                    cout << "4. Eliminar Carrera\n";
-                    cout << "5. Actualizar Carrera\n";
-                    cout << "6. Volver\n";
-                    cout << "Selecciona una opcion: ";
-                    cin >> subOpcion;
-
-                    if (subOpcion == 1)
-                    {
-                        /*AGREGAR NUEVA CARRERA*/
-                        cout << "Nombre Carrera: ";
-                        getline(cin, nombreCarrera);
-                        getline(cin, nombreCarrera); // Esto es para evitar el bucle infinito...
-                        carrera = Carrera(nombreCarrera);
-                        carrera.agregarCarrera();
-                    }
-                    else if (subOpcion == 2)
-                    {
-                        cout << "ID Carrera a Consultar: ";
-                        cin >> idCarrera;
-                        carrera.mostrarCarreraPorId(idCarrera);
-                    }
-                    else if (subOpcion == 3)
-                    {
-                        carrera.mostrarCarrera();
-                    }
-                    else if (subOpcion == 4)
-                    {
-                        cout << "ID Carrera: ";
-                        cin >> idCarrera;
-                        cin.ignore();
-                        if (carrera.verificarCarrera(idCarrera) == 1)
-                        {
-                            carrera.eliminarCarrera(idCarrera);
-                        }
-                        else
-                        {
-                            cout << "\nError, No se pudo encontrar carrera con dicho ID" << endl;
-                        }
-                    }
-                    else if (subOpcion == 5)
-                    {
-                        cout << "ID Carrera: ";
-                        cin >> idCarrera;
-                        cin.ignore();
-                        cout << "Nombre Nuevo de Carrera: ";
-                        getline(cin, nombreCarrera);
-                        carrera = Carrera(nombreCarrera);
-
-                        if (carrera.verificarCarrera(idCarrera) == 1)
-                        {
-                            carrera.actualizarCarrera(idCarrera);
-                        }
-                        else
-                        {
-                            cout << "\nError, No se pudo encontrar carrera con dicho ID" << endl;
-                        }
-                    }
-
-                } while (subOpcion != 6);
+                carrera = Carrera();
+                carrera.menuCarrera();
                 break;
             }
-
             case 3:
             {
+                editorial = Editorial();
+                editorial.menuEditorial();
                 break;
             }
-
-            case 8:
-                cout << "Saliendo...\n";
-                system("cls");
+            case 4:
+            {
+                categoria = Categoria();
+                categoria.menuCategoria();
+                break;   
+            }
+            case 5:
+            {
+                autor = Autor();
+                autor.menuAutor();
                 break;
+            }
+            case 8:
+                cout << "\nVolviendo" << endl;
+                system("cls");
+                return;
+
+            case 9:
+                cout << "\nTerminando" << endl;
+                exit(0);
 
             default:
-                cout << "Opción no valida. Inténtalo de nuevo.\n";
+                cout << "\nOpcion no valida. Intentalo de nuevo.\n";
                 break;
             }
 
-        } while (opcion != 8);
+        } while (true);
     }
 };

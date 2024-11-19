@@ -8,6 +8,9 @@ using namespace std;
 class Login
 {
 public:
+    string user, pass;
+    char caracter;
+
     // INICIO DE SESION
     int iniciarSesion(string usuario, string password)
     {
@@ -46,5 +49,46 @@ public:
         }
         conn.close_connection();
         return 0;
+    }
+
+    bool mostrarLogin()
+    {
+        cout << "\n------------------Login------------------\n";
+        cout << "Ingrese el nombre de usuario: ";
+        cin >> user;
+        cout << "Ingrese la contrasena: ";
+
+        // Todo lo que esta dentro del bucle while es para ocultar la contraseña con un asterisco *
+        caracter = getch();
+        pass = "";
+        while (caracter != 13) // El numero 13 representa la tecla ENTER
+        {
+            if (caracter != 8) // El numero 8 representa la tecla BACKSPACE
+            {
+                pass.push_back(caracter);
+                cout << "*";
+            }
+            else
+            {
+                if (pass.length() > 0) // Este bloque sirve para borrar caracteres en caso de equivocarse en la contraseña
+                {
+                    cout << "\b \b";
+                    pass.pop_back();
+                }
+            }
+            caracter = getch();
+        }
+
+        if (iniciarSesion(user, pass) == 1)
+        {
+            cout << "\nExito" << endl;
+            system("cls");
+            return true;
+        }
+        else 
+        {
+            cout << "\nVuelva a intentarlo" << endl;
+            return false;
+        }
     }
 };

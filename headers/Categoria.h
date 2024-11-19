@@ -1,4 +1,3 @@
-#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -6,7 +5,7 @@
 
 using namespace std;
 
-class Carrera
+class Categoria
 {
 private:
     ConexionDB conn;
@@ -14,31 +13,31 @@ private:
     MYSQL_RES *res;
 
 public:
-    int idCarrera;
-    string nombreCarrera;
+    int idCategoria;
+    string nombreCategoria;
     int state = 0;
 
-    Carrera() {}
+    Categoria() {}
 
-    Carrera(string n)
-        : nombreCarrera(n) {}
+    Categoria(string n)
+        : nombreCategoria(n) {}
 
-    // METODO PARA AGREGAR CARRERA
-    void agregarCarrera()
+    // METODO PARA AGREGAR CATEGORIA
+    void agregarCategoria()
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "insert into carreras (Nombre_Carrera) values ('" + nombreCarrera + "');";
+            string sql = "insert into categorias (Nombre_Categoria) values ('" + nombreCategoria + "');";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
 
             if (!state)
             {
                 system("color a");
-                cout << "\nCarrera registrada exitosamente!" << endl;
+                cout << "\nCategoria registrada exitosamente!" << endl;
             }
             else
             {
@@ -49,8 +48,8 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA MOSTRAR CARRERA
-    void mostrarCarreras()
+    // METODO PARA MOSTRAR CATEGORIAS
+    void mostrarCategorias()
     {
         conn = ConexionDB();
         conn.open_connection();
@@ -58,9 +57,9 @@ public:
         if (conn.getConnector())
         {
             system("color a");
-            cout << "-------------------------Listado de Carreras-------------------------" << endl;
+            cout << "-------------------------Listado de Categorias-------------------------" << endl;
 
-            string sql = "select * from carreras;";
+            string sql = "select * from categorias;";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
 
@@ -82,15 +81,15 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA MOSTRAR CARRERA POR ID
-    int mostrarCarreraPorId(int id)
+    // METODO PARA MOSTRAR CATEGORIA POR ID
+    int mostrarCategoriaPorId(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            string sql = "select * from categorias where ID_Categoria = " + to_string(id) + ";";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -99,7 +98,7 @@ public:
                 if ((row = mysql_fetch_row(res)) != nullptr)
                 {
                     // Mostrar el registro encontrado
-                    cout << "\nID_Carrera: " << row[0] << ", Nombre_Carrera: " << row[1] << endl;
+                    cout << "\nID_Cateogoria: " << row[0] << ", Nombre_Categoria: " << row[1] << endl;
                     return 1;
                 }
                 else
@@ -115,15 +114,15 @@ public:
         return 0;
     }
 
-    // METODO PARA MOSTRAR CARRERA POR NOMBRE DE CARRERA
-    int mostrarCarreraPorNombre(string nombre)
+    // METODO PARA MOSTRAR CATEGORIA POR NOMBRE
+    int mostrarCategoriaPorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where Nombre_Carrera like '%" + nombre + "%';";
+            string sql = "select * from categorias where Nombre_Categoria like '%" + nombre + "%';";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -157,15 +156,15 @@ public:
         return 0;
     }
 
-    // METODO PARA VERIFICAR SI EXISTE CARRERA POR ID
-    bool verificarCarrera(int id)
+    // METODO PARA VERIFICAR SI EXISTE CATEGORIA POR ID
+    bool verificarCategoria(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
         if (conn.getConnector())
         {
-            string sql = "select * from carreras where ID_Carrera = " + to_string(id) + ";";
+            string sql = "select * from categorias where ID_Categoria = " + to_string(id) + ";";
             const char *c = sql.c_str();
             state = mysql_query(conn.getConnector(), c);
             if (!state)
@@ -187,24 +186,24 @@ public:
         return false;
     }
 
-    // METODO PARA ACTUALIZAR CARRERA
-    void actualizarCarrera(int id)
+    // METODO PARA ACTUALIZAR CATEGORIA
+    void actualizarCategoria(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
-        if (verificarCarrera(id))
+        if (verificarCategoria(id))
         {
             if (conn.getConnector())
             {
-                string sql = "update carreras set Nombre_Carrera ='" + nombreCarrera + "' where ID_Carrera =" + to_string(id) + ";";
+                string sql = "update categorias set Nombre_Categoria ='" + nombreCategoria + "' where ID_Categoria =" + to_string(id) + ";";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
                 if (!state)
                 {
                     system("color a");
-                    cout << "\nCarrera actualizada exitosamente!" << endl;
+                    cout << "\nCategoria actualizada exitosamente!" << endl;
                 }
                 else
                 {
@@ -215,29 +214,29 @@ public:
         }
         else
         {
-            cout << "\nNo se encontro carrera con dicho ID" << endl;
+            cout << "\nNo se encontro categoria con dicho ID" << endl;
         }
         conn.close_connection();
     }
 
-    // METODO PARA ELIMININAR CARRERA
-    void eliminarCarrera(int id)
+    // METODO PARA ELIMININAR CATEGORIA
+    void eliminarCategoria(int id)
     {
         conn = ConexionDB();
         conn.open_connection();
 
-        if (verificarCarrera(id))
+        if (verificarCategoria(id))
         {
             if (conn.getConnector())
             {
-                string sql = "delete from carreras where ID_Carrera =" + to_string(id) + ";";
+                string sql = "delete from categorias where ID_Categoria =" + to_string(id) + ";";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
                 if (!state)
                 {
                     system("color a");
-                    cout << "\nCarrera eliminada exitosamente!" << endl;
+                    cout << "\nCategoria eliminada exitosamente!" << endl;
                 }
                 else
                 {
@@ -248,39 +247,38 @@ public:
         }
         else
         {
-            cout << "\nNo se encontro carrera con dicho ID" << endl;
+            cout << "\nNo se encontro categoria con dicho ID" << endl;
         }
         conn.close_connection();
     }
 
-    // ESTE ES EL MENU DE CARRERAS
-    void menuCarrera()
+    // ESTE ES EL MENU DE CATEGORIA
+    void menuCategoria()
     {
         int subOpcion, subO;
-        int idCarrera;
-        string nombreCarrera;
-        Carrera carrera; // Objeto Carrera
+        int idCategoria;
+        string nombreCategoria;
+        Categoria categoria;
 
         do
         {
-            cout << "\nSubmenu Carreras:\n";
-            cout << "1. Agregar Carrera\n";
-            cout << "2. Consultar Carrera\n";
-            cout << "3. Mostrar Todas las Carreras\n";
-            cout << "4. Eliminar Carrera\n";
-            cout << "5. Actualizar Carrera\n";
+            cout << "\nSubmenu Categoria:\n";
+            cout << "1. Agregar Categoria\n";
+            cout << "2. Consultar Categoria\n";
+            cout << "3. Mostrar Todas las Categorias\n";
+            cout << "4. Eliminar Categoria\n";
+            cout << "5. Actualizar Categoria\n";
             cout << "6. Volver\n";
             cout << "Selecciona una opcion: ";
             cin >> subOpcion;
 
             if (subOpcion == 1)
             {
-                /*AGREGAR NUEVA CARRERA*/
-                cout << "\nNombre Carrera: ";
-                getline(cin, nombreCarrera);
-                getline(cin, nombreCarrera); // Esto es para evitar el bucle infinito...
-                carrera = Carrera(nombreCarrera);
-                carrera.agregarCarrera();
+                cout << "\nNombre Categoria: ";
+                getline(cin, nombreCategoria);
+                getline(cin, nombreCategoria); // Esto es para evitar el bucle infinito...
+                categoria = Categoria(nombreCategoria);
+                categoria.agregarCategoria();
             }
             else if (subOpcion == 2)
             {
@@ -294,17 +292,17 @@ public:
                 {
                     if (subO == 1)
                     {
-                        cout << "\nID Carrera a Consultar: ";
-                        cin >> idCarrera;
-                        carrera.mostrarCarreraPorId(idCarrera);
+                        cout << "\nID Categoria a Consultar: ";
+                        cin >> idCategoria;
+                        categoria.mostrarCategoriaPorId(idCategoria);
                         break;
                     }
                     else if (subO == 2)
                     {
-                        cout << "\nNombre Carrera a Consultar: ";
-                        getline(cin, nombreCarrera);
-                        getline(cin, nombreCarrera);
-                        carrera.mostrarCarreraPorNombre(nombreCarrera);
+                        cout << "\nNombre Categoria a Consultar: ";
+                        getline(cin, nombreCategoria);
+                        getline(cin, nombreCategoria);
+                        categoria.mostrarCategoriaPorNombre(nombreCategoria);
                         break;
                     }
                     else
@@ -318,24 +316,24 @@ public:
             else if (subOpcion == 3)
             {
                 cout << endl;
-                carrera.mostrarCarreras();
+                categoria.mostrarCategorias();
             }
             else if (subOpcion == 4)
             {
-                cout << "\nID Carrera a eliminar: ";
-                cin >> idCarrera;
+                cout << "\nID Categoria a eliminar: ";
+                cin >> idCategoria;
                 cin.ignore();
-                carrera.eliminarCarrera(idCarrera);
+                categoria.eliminarCategoria(idCategoria);
             }
             else if (subOpcion == 5)
             {
-                cout << "\nID Carrera a modificar: ";
-                cin >> idCarrera;
+                cout << "\nID Categoria a modificar: ";
+                cin >> idCategoria;
                 cin.ignore();
-                cout << "Nombre Nuevo de Carrera: ";
-                getline(cin, nombreCarrera);
-                carrera = Carrera(nombreCarrera);
-                carrera.actualizarCarrera(idCarrera);
+                cout << "Nombre Nuevo de Categoria: ";
+                getline(cin, nombreCategoria);
+                categoria = Categoria(nombreCategoria);
+                categoria.actualizarCategoria(idCategoria);
             }
             else if (subOpcion != 6)
             {
