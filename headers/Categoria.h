@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -115,10 +116,11 @@ public:
     }
 
     // METODO PARA MOSTRAR CATEGORIA POR NOMBRE
-    int mostrarCategoriaPorNombre(string nombre)
+    bool mostrarCategoriaPorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -131,17 +133,16 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
                         cout << "\n"
-                             << row[0] << ", " << row[1] << ", " << row[2];
+                             << row[0] << ", " << row[1];
                         found = true;
                     }
                     cout << endl;
                     if (!found)
                     {
-                        cout << "\nNo se encontro ningun registro con Nombre = " << nombre << endl;
+                        cout << "No se encontro ningun registro con Nombre = " << nombre << endl;
                     }
                     // Liberar el resultado después de usarlo
                     mysql_free_result(res);
@@ -153,7 +154,7 @@ public:
             }
         }
         conn.close_connection();
-        return 0;
+        return found;
     }
 
     // METODO PARA VERIFICAR SI EXISTE CATEGORIA POR ID

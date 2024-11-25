@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -112,10 +113,11 @@ public:
     }
 
     // METODO PARA MOSTRAR AUTOR POR NOMBRE
-    void mostrarAutorPorNombre(string nombre)
+    bool mostrarAutorPorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -128,7 +130,6 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
                         cout << "\n"
@@ -138,7 +139,7 @@ public:
                     cout << endl;
                     if (!found)
                     {
-                        cout << "\nNo se encontro ningun registro con Nombre = " << nombre << endl;
+                        cout << "No se encontro ningun registro con Nombre = " << nombre << endl;
                     }
                     // Liberar el resultado después de usarlo
                     mysql_free_result(res);
@@ -150,13 +151,15 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR AUTOR POR NACIONALIDAD
-    void mostrarAutorPorNacionalidad(string nacionalidad)
+    bool mostrarAutorPorNacionalidad(string nacionalidad)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -169,7 +172,6 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
                         cout << "\n"
@@ -179,7 +181,7 @@ public:
                     cout << endl;
                     if (!found)
                     {
-                        cout << "\nNo se encontro ningun registro con Nacionalidad = " << nacionalidad << endl;
+                        cout << "No se encontro ningun registro con Nacionalidad = " << nacionalidad << endl;
                     }
                     // Liberar el resultado después de usarlo
                     mysql_free_result(res);
@@ -191,6 +193,7 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA VERIFICAR SI EXISTE AUTOR POR ID
@@ -392,4 +395,3 @@ public:
         } while (subOpcion != 6);
     }
 };
-

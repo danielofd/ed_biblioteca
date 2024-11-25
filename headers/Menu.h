@@ -5,6 +5,7 @@
 #include "Categoria.h"
 #include "Autor.h"
 #include "Estudiante.h"
+#include "Libro.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ public:
     Editorial editorial;
     Categoria categoria;
     Autor autor;
+    Libro libro;
 
     void menuPrincipal()
     {
@@ -24,15 +26,15 @@ public:
         do
         {
             cout << "\nMenu Principal:\n";
-            cout << "1. Estudiantes\n";//listo
-            cout << "2. Carreras\n";//listo
-            cout << "3. Editoriales\n";//listo
-            cout << "4. Categorias\n";//listo
-            cout << "5. Autores\n";//listo
-            cout << "6. Libros\n";
-            cout << "7. Reservas\n"; 
-            cout << "8. Volver al login\n";//listo
-            cout << "9. Finalizar\n";//listo
+            cout << "1. Estudiantes\n"; 
+            cout << "2. Carreras\n";    
+            cout << "3. Editoriales\n"; 
+            cout << "4. Categorias\n";  
+            cout << "5. Autores\n";     
+            cout << "6. Libros\n";      
+            cout << "7. Reservas\n";
+            cout << "8. Volver al login\n"; 
+            cout << "9. Finalizar\n";       
             cout << "Selecciona una opcion: ";
             cin >> opcion;
 
@@ -60,12 +62,22 @@ public:
             {
                 categoria = Categoria();
                 categoria.menuCategoria();
-                break;   
+                break;
             }
             case 5:
             {
                 autor = Autor();
                 autor.menuAutor();
+                break;
+            }
+            case 6:
+            {
+                libro = Libro();
+                libro.menuLibro();
+                break;
+            }
+            case 7:
+            {
                 break;
             }
             case 8:

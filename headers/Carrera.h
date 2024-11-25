@@ -142,7 +142,7 @@ public:
                     cout << endl;
                     if (!found)
                     {
-                        cout << "\nNo se encontro ningun registro con Nombre = " << nombre << endl;
+                        cout << "No se encontro ningun registro con Nombre = " << nombre << endl;
                     }
                     // Liberar el resultado después de usarlo
                     mysql_free_result(res);

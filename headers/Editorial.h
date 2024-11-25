@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -115,10 +116,11 @@ public:
     }
 
     // METODO PARA MOSTRAR EDITORIAL POR NOMBRE
-    int mostrarEditorialPorNombre(string nombre)
+    bool mostrarEditorialPorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -131,17 +133,16 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
                         cout << "\n"
-                             << row[0] << ", " << row[1] << ", " << row[2];
+                             << row[0] << ", " << row[1];
                         found = true;
                     }
                     cout << endl;
                     if (!found)
                     {
-                        cout << "\nNo se encontro ningun registro con Nombre = " << nombre << endl;
+                        cout << "No se encontro ningun registro con Nombre = " << nombre << endl;
                     }
                     // Liberar el resultado después de usarlo
                     mysql_free_result(res);
@@ -153,10 +154,10 @@ public:
             }
         }
         conn.close_connection();
-        return 0;
+        return found;
     }
 
-    // METODO PARA VERIFICAR SI EXISTE EDITORIAL POR ID
+    // METODO PARA VERIFICAR SI EXISTE CARRERA POR ID
     bool verificarEditorial(int id)
     {
         conn = ConexionDB();
@@ -186,7 +187,7 @@ public:
         return false;
     }
 
-    // METODO PARA ACTUALIZAR EDITORIAL
+    // METODO PARA ACTUALIZAR CARRERA
     void actualizarEditorial(int id)
     {
         conn = ConexionDB();
@@ -219,7 +220,7 @@ public:
         conn.close_connection();
     }
 
-    // METODO PARA ELIMININAR EDITORIAL
+    // METODO PARA ELIMININAR CARRERA
     void eliminarEditorial(int id)
     {
         conn = ConexionDB();
