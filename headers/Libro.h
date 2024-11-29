@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -139,10 +140,11 @@ public:
     }
 
     // METODO PARA MOSTRAR LIBRO POR TITULO
-    void mostrarLibroPorTitulo(string titulo)
+    bool mostrarLibroPorTitulo(string titulo)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -160,10 +162,9 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
-                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[7];
+                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[6];
                         found = true;
                     }
                     cout << endl;
@@ -181,13 +182,15 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR LIBRO POR AUTOR
-    void mostrarLibroPorAutor(string autor)
+    bool mostrarLibroPorAutor(string autor)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -205,10 +208,9 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
-                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[7];
+                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[6];
                         found = true;
                     }
                     cout << endl;
@@ -226,13 +228,15 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR LIBRO POR EDITORIAL
-    void mostrarLibroPorEditorial(string editorial)
+    bool mostrarLibroPorEditorial(string editorial)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -250,10 +254,9 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
-                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[7];
+                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[6];
                         found = true;
                     }
                     cout << endl;
@@ -271,13 +274,15 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR LIBRO POR CATEGORIA
-    void mostrarLibroPorCategoria(string categoria)
+    bool mostrarLibroPorCategoria(string categoria)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -295,10 +300,9 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
-                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[7];
+                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[6];
                         found = true;
                     }
                     cout << endl;
@@ -316,13 +320,15 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR LIBRO POR FECHA DE PUBLICACION
-    void mostrarLibroPorFecha(int fecha)
+    bool mostrarLibroPorFecha(int fecha)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -340,10 +346,9 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
-                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[7];
+                        cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << " || " << row[6];
                         found = true;
                     }
                     cout << endl;
@@ -361,6 +366,7 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA VERIFICAR SI EXISTE LIBRO POR ID
@@ -494,16 +500,19 @@ public:
                 getline(cin, titulo);
                 getline(cin, titulo);
 
+                cout << "\nNo Recuerdas el ID del Autor? Estas Opciones Te Pueden Ayudar a Buscarlo.\n";
                 libro.verificarAutor();
 
                 cout << "\nID Autor: ";
                 cin >> idAutor;
 
+                cout << "\nNo Recuerdas el ID de la Editorial? Estas Opciones Te Pueden Ayudar a Buscarlo.\n";
                 libro.verificarEditorial();
 
                 cout << "\nID Editorial: ";
                 cin >> idEditorial;
 
+                cout << "\nNo Recuerdas el ID de la Categoria? Estas Opciones Te Pueden Ayudar a Buscarlo.\n";
                 libro.verificarCategoria();
 
                 cout << "\nID Categoria: ";
@@ -606,16 +615,19 @@ public:
                 cout << "\nNuevo Titulo Libro: ";
                 getline(cin, titulo);
 
+                cout << "\nNo Recuerdas el ID del Autor? Estas Opciones Te Pueden Ayudar a Buscarlo.\n";
                 libro.verificarAutor();
 
                 cout << "\nNuevo ID Autor: ";
                 cin >> idAutor;
 
+                cout << "\nNo Recuerdas el ID de la Editorial? Estas Opciones Te Pueden Ayudar a Buscarlo.\n";
                 libro.verificarEditorial();
 
                 cout << "\nNuevo ID Editorial: ";
                 cin >> idEditorial;
 
+                cout << "\nNo Recuerdas el ID de la Categoria? Estas Opciones Te Pueden Ayudar a Buscarlo.\n";
                 libro.verificarCategoria();
 
                 cout << "\nNuevo ID Categoria: ";
@@ -636,8 +648,6 @@ public:
 
         } while (subOpcion != 6);
     }
-
-    //LOS METODOS SIGUIENTE SE UTILIZAN EN LAS OPCIONES DE AGREGAR Y ACTUALIZAR LIBRO
 
     // METODO PARA BUSCAR AUTOR
     void verificarAutor()

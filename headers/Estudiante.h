@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <mysql.h>
@@ -131,10 +132,11 @@ public:
     }
 
     // METODO PARA MOSTRAR ESTUDIANTE POR NOMBRE
-    void mostrarEstudiantePorNombre(string nombre)
+    bool mostrarEstudiantePorNombre(string nombre)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -150,7 +152,6 @@ public:
 
                 if (res)
                 {
-                    bool found = false;
                     while ((row = mysql_fetch_row(res)) != nullptr)
                     {
                         cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5];
@@ -171,13 +172,15 @@ public:
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR ESTUDIANTE POR EMAIL
-    void mostrarEstudiantePorEmail(string e)
+    bool mostrarEstudiantePorEmail(string e)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -194,23 +197,27 @@ public:
                 {
                     // Mostrar el registro encontrado
                     cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << endl;
+                    found = true;
                 }
                 else
                 {
                     cout << "\nNo se encontro ningun registro con Email = " << e << endl;
+                    found = false;
                 }
                 // Liberar el resultado después de usarlo
                 mysql_free_result(res);
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA MOSTRAR ESTUDIANTE POR TELEFONO
-    void mostrarEstudiantePorTelefono(int tel)
+    bool mostrarEstudiantePorTelefono(int tel)
     {
         conn = ConexionDB();
         conn.open_connection();
+        bool found = false;
 
         if (conn.getConnector())
         {
@@ -227,16 +234,19 @@ public:
                 {
                     // Mostrar el registro encontrado
                     cout << "\n" <<row[0] << " || " << row[1] << " || " << row[2] << " || " << row[3] << " || " << row[4] << " || " << row[5] << endl;
+                    found = true;
                 }
                 else
                 {
                     cout << "\nNo se encontro ningun registro con Email = " << tel << endl;
+                    found = false;
                 }
                 // Liberar el resultado después de usarlo
                 mysql_free_result(res);
             }
         }
         conn.close_connection();
+        return found;
     }
 
     // METODO PARA VERIFICAR SI EXISTE ESTUDIANTE POR ID

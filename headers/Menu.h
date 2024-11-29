@@ -6,6 +6,7 @@
 #include "Autor.h"
 #include "Estudiante.h"
 #include "Libro.h"
+#include "Reserva.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
     Categoria categoria;
     Autor autor;
     Libro libro;
+    Reserva reserva;
 
     void menuPrincipal()
     {
@@ -78,6 +80,8 @@ public:
             }
             case 7:
             {
+                reserva = Reserva();
+                reserva.menuReserva();
                 break;
             }
             case 8:
