@@ -44,8 +44,7 @@ public:
             {
                 string rL = to_string(idLibro);
                 string rE = to_string(idEstudiante);
-                string rEst = to_string(estado);
-                string sql = "insert into reservas (ID_Libro, ID_Estudiante, Fecha_Reserva, Expiracion_Reserva) values ('" + rL + "','" + rE + "','" + reserva + "', '" + rEst + "');";
+                string sql = "insert into reservas (ID_Libro, ID_Estudiante, Fecha_Reserva, Expiracion_Reserva) values ('" + rL + "','" + rE + "','" + reserva + "', '" + devolucion + "');";
                 const char *c = sql.c_str();
                 state = mysql_query(conn.getConnector(), c);
 
