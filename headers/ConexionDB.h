@@ -14,7 +14,7 @@ public:
     void open_connection()
     {
         connector = mysql_init(0);
-        connector = mysql_real_connect(connector, "localhost", "root", "WorkbenchSQL", "biblioteca", 0, NULL, 0);
+        connector = mysql_real_connect(connector, "localhost", "root", "r00t", "biblioteca", 0, NULL, 0);
     }
 
     MYSQL *getConnector()
